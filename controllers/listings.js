@@ -80,21 +80,20 @@ module.exports.searchListings = async (req, res) => {
   const searchTerm = req.query.q || "";
   const regex = new RegExp(escapeRegex(searchTerm), "i");
 
-  // Create the base query
-  let query = {
-    $or: [
-      { title: regex },
-      { location: regex },
-      { country: regex },
-    ],
-  };
+  const searchConditions = [
+    { title: regex },
+    { location: regex },
+    { country: regex },
+  ];
 
-  // If the search term is a valid number, also search by price
+  // Check if searchTerm is a number, then also search by price
   if (!isNaN(searchTerm)) {
-    query.$or.push({ price: Number(searchTerm) });
+    searchConditions.push({ price: Number(searchTerm) });
   }
 
-  const allListings = await Listing.find(query);
+  const allListings = await Listing.find({
+    $or: searchConditions,
+  });
 
   res.render("listings/index.ejs", { allListings });
 };
@@ -102,3 +101,4 @@ module.exports.searchListings = async (req, res) => {
 function escapeRegex(text) {
   return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
 }
+
