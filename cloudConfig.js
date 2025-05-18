@@ -12,7 +12,7 @@ const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: {
     folder: 'travel_friendly',
-    allowerdFormat: ["png","jpg","jpeg"],
+    allowerdFormats: ["png","jpg","jpeg"],
   },
 });
 
