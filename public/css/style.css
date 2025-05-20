@@ -88,7 +88,9 @@ body{
     background-color: white;
 }
 .container{
-    flex:1;
+    max-width: 1024px;
+    margin:0 auto;
+    padding:  1rem 2rem;
 }
 .add-btn{
     background-color: #fe424d;
@@ -102,9 +104,27 @@ body{
 
 }
 /* show page */
-.show-img{
-    height: 30vh;
+/* Only style show page image */
+.show-img {
+   width: 100%;
+  max-width: 800px;
+  height: auto;
+  max-height: 500px;
+  object-fit: cover;
+  border-radius: 1rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  display: block;
+  margin: 1.5rem auto;
 }
+
+/* Optional: style the show card container */
+.show-card {
+  padding: 1rem;
+  border: none;
+  background-color: #fff;
+}
+
+
 
 .btns{
     display: flex;
@@ -118,7 +138,9 @@ body{
 #map{
     height: 400px;
     width: 80vh;
-    border-radius: 10px;
+    border-radius: 1rem;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+    margin-top: 1rem;
 }
 
   /* Flatpickr base calendar style */
@@ -129,6 +151,9 @@ body{
     border: 1px solid #ccc;
     border-radius: 0.6rem;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    max-width: 400px;
+    width: 100%;
+    margin-top: 0.5rem;
   }
 
   .flatpickr-calendar {
@@ -149,3 +174,17 @@ body{
     border-bottom: 1px solid #dee2e6;
   }
 
+h3,h4{
+    margin-top: 2rem;
+    font-weight: 600;
+}
+.addres {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 1.5rem;
+  background-color: #f8f9fa;
+  font-size: 1rem;
+  line-height: 1.6;
+  margin-top: 1rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}

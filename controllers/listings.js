@@ -102,3 +102,25 @@ function escapeRegex(text) {
   return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
 }
 
+module.exports.updateBookings = async (req, res) => {
+  const { id } = req.params;
+  let { bookedDates } = req.body;
+
+  const listing = await Listing.findById(id);
+
+  if (!listing.owner.equals(req.user._id)) {
+    req.flash("error", "You do not have permission to update bookings.");
+    return res.redirect(`/listings/${id}`);
+  }
+
+  listing.bookedDates = Array.isArray(bookedDates)
+    ? bookedDates
+    : bookedDates.split(",").map(date => date.trim());
+
+  await listing.save();
+
+  req.flash("success", "Booking dates updated.");
+  res.redirect(`/listings/${id}`);
+};
+
+

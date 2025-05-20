@@ -74,6 +74,17 @@
          required
          />
         </div>
+        <div class="mb-3">
+  <label for="type" class="form-label">Listing Type</label>
+  <select class="form-select" name="listing[type]" required>
+    <option disabled value="">-- Choose Listing Type --</option>
+    <% const types = ['Trending', 'Rooms', 'Iconic Cities', 'Mountain', 'Castles', 'Amazing Pools', 'Camping', 'Farms', 'Arctic', 'Domes', 'Boats']; %>
+    <% types.forEach(type => { %>
+      <option value="<%= type %>" <%= listing.type === type ? 'selected' : '' %>><%= type %></option>
+    <% }) %>
+  </select>
+</div>
+
 
 
         <button class="btn btn-dark edit-btn mt-3">Edit</button>

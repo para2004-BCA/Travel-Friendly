@@ -24,4 +24,8 @@ userController.login
 
 router.get("/logout",userController.logout);
 
+router.get("/forgot-password", userController.renderForgotPasswordForm);
+router.post("/forgot-password", userController.resetPasswordForm);
+
+
 module.exports= router;

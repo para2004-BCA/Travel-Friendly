@@ -20,12 +20,12 @@
       </div>
 
       <div class="mb-3">
-        <label for="description" class="form-label">Description</label>
+        <label for="description" class="form-label">  give your Description & <b>Mobile Number</b></label>
         <textarea 
           name="listing[description]"  
           class="form-control" 
           required><%= typeof listing !== 'undefined' ? listing.description : '' %></textarea>
-        <div class="invalid-feedback">Please enter a short description</div>
+        <div class="invalid-feedback">Please enter a short description and give your mobile Number</div>
       </div>
 
       <div class="mb-3">
@@ -76,6 +76,24 @@
         />
         <div class="invalid-feedback">Please enter the location</div>
       </div>
+      <div class="mb-3">
+  <label for="type" class="form-label">Listing Type</label>
+  <select class="form-select" name="listing[type]" required>
+    <option disabled selected value="">-- Choose Listing Type --</option>
+    <option>Trending</option>
+    <option>Rooms</option>
+    <option>Iconic Cities</option>
+    <option>Mountain</option>
+    <option>Castles</option>
+    <option>Amazing Pools</option>
+    <option>Camping</option>
+    <option>Farms</option>
+    <option>Arctic</option>
+    <option>Domes</option>
+    <option>Boats</option>
+  </select>
+</div>
+
 
       <br /><br />
       <button class="btn btn-dark add-btn mt-3">Add</button>
