@@ -24,14 +24,7 @@ const listingSchema = new Schema({
     ],
     required: true
   },
-  reviews: [{
-    type: Schema.Types.ObjectId,
-    ref: "Review"
-  }],
-  owner: {
-    type: Schema.Types.ObjectId,
-    ref: "User"
-  },
+  
   geometry: {
     type: {
       type: String,
@@ -43,7 +36,22 @@ const listingSchema = new Schema({
       required: true
     }
   },
-  bookedDates: [Date]
+  bookedDates: [Date],
+  reviews: [{
+    type: Schema.Types.ObjectId,
+    ref: "Review"
+  }],
+  
+  owner: {
+    type: Schema.Types.ObjectId,
+    ref: "User"
+  },
+  ownerName: String,
+ownerAddress: String,
+ownerAge: Number,
+ownerGender: String,
+ownerMobile: String,
+
 });
 
 listingSchema.post("findOneAndDelete", async (listing) => {

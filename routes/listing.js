@@ -23,14 +23,6 @@ router
 
 router.get("/new", isLoggedIn, listingController.renderNewForm);
 
-router.put(
-  "/:id/bookings",
-  isLoggedIn,
-  isOwner,
-  wrapAsync(listingController.updateBookings)
-);
-
-
 router
   .route("/:id")
   .get(wrapAsync(listingController.showListing))

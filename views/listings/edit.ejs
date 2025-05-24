@@ -1,98 +1,132 @@
 <% layout("/layouts/boilerplate")%>
 <div class="row mt-3">
-    <div class="col-8 offset-2">
-   
+  <div class="col-8 offset-2">
+    <h3>Edit your Listing</h3>
 
-    <h3>Edit your  Listing</h3>
+    <form 
+      method="POST" 
+      action="/listings/<%= listing._id %>?_method=PUT" 
+      novalidate 
+      class="needs-validation"
+      enctype="multipart/form-data"
+    >
 
-    <form method="POST" action="/listings/<%= listing._id %>?_method=PUT" 
-        novalidate class="needs-validation"
-        enctype="multipart/form-data"
+      <!-- Title -->
+      <div class="mb-3">
+        <label for="title" class="form-label">Title</label>
+        <input 
+          name="listing[title]" 
+          value="<%= listing.title %>"
+          type="text"
+          class="form-control"
+          required
+        />
+      </div>
+
+      <!-- Description -->
+      <div class="mb-3">
+        <label for="description" class="form-label">Description</label>
+        <textarea 
+          name="listing[description]" 
+          class="form-control" 
+          required
+        ><%= listing.description %></textarea>
+      </div>
+
+      <!-- Image -->
+      <div class="mb-3">
+        <label for="image" class="form-label">Upload New Image</label>
+        <input 
+          type="file" 
+          name="listing[image]"  
+          class="form-control"
         >
-        <div class="mb-3">
-            <label for="title" class="form-label">Title</label>
-            <input 
-            name="listing[title]" 
-            value="<%=listing.title%>"
-            type="text"
+      </div>
+
+      <!-- Price and Country -->
+      <div class="row">
+        <div class="mb-3 col-md-4">
+          <label for="price" class="form-label">Price</label>
+          <input 
+            name="listing[price]"  
+            value="<%= listing.price %>" 
+            type="number"
             class="form-control"
             required
-            />
+          />
         </div>
-
-
-        <div class="mb-3">
-            <label for="description" class="form-label">Description</label>
-        <textarea 
-            name="listing[description]"  
-          class="form-control" 
-          required><%= typeof listing !== 'undefined' ? listing.description : '' %>
-       </textarea>
-        </div> 
-
-
-        <div class="mb-3">
-            <label for="image" class="form-label">Upload New Image</label>
-        <input  
-         type="file" name="listing[image]"  
-         class="form-control"
-         >
-        </div>
-
-        <div class="row">
-        <div class="mb-3 col-md-4">
-            <label for="price" class="form-label">Price</label>
-        <input
-        name="listing[price]"  
-        value="<%=listing.price %>" 
-        type="number"
-        class="form-control"
-         required
-         />
-        </div>
-
 
         <div class="mb-3 col-md-8">
-            <label for="country" class="form-label">Country</label>
+          <label for="country" class="form-label">Country</label>
+          <input 
+            name="listing[country]" 
+            value="<%= listing.country %>" 
+            type="text"
+            class="form-control"  
+            required
+          />
+        </div>
+      </div>
+
+      <!-- Location -->
+      <div class="mb-3">
+        <label for="location" class="form-label">Location</label>
         <input 
-        name="listing[country]" 
-        value="<%=listing.country %>" 
-        type="text"
-        class="form-control"  required
+          name="listing[location]"  
+          value="<%= listing.location %>" 
+          type="text"
+          class="form-control"
+          required
         />
-        </div>
-    </div>
+      </div>
 
+      <!-- Type -->
+      <div class="mb-3">
+        <label for="type" class="form-label">Listing Type</label>
+        <select class="form-select" name="listing[type]" required>
+          <option disabled value="">-- Choose Listing Type --</option>
+          <% const types = ['Trending', 'Rooms', 'Iconic Cities', 'Mountain', 'Castles', 'Amazing Pools', 'Camping', 'Farms', 'Arctic', 'Domes', 'Boats']; %>
+          <% types.forEach(type => { %>
+            <option value="<%= type %>" <%= listing.type === type ? 'selected' : '' %>><%= type %></option>
+          <% }) %>
+        </select>
+      </div>
+      <br/><br/>
 
-        <div class="mb-3">
-            <label for="location" class="form-label">Location</label>
-        <input 
-        name="listing[location]"  
-        value="<%=listing.location %>" 
-        type="text"
-        class="form-control"
-         required
-         />
-        </div>
-        <div class="mb-3">
-  <label for="type" class="form-label">Listing Type</label>
-  <select class="form-select" name="listing[type]" required>
-    <option disabled value="">-- Choose Listing Type --</option>
-    <% const types = ['Trending', 'Rooms', 'Iconic Cities', 'Mountain', 'Castles', 'Amazing Pools', 'Camping', 'Farms', 'Arctic', 'Domes', 'Boats']; %>
-    <% types.forEach(type => { %>
-      <option value="<%= type %>" <%= listing.type === type ? 'selected' : '' %>><%= type %></option>
-    <% }) %>
-  </select>
-</div>
+      <!-- ✅ Owner Info -->
+      <h4>Owner Information</h4>
+      <br/>
+      <div class="mb-3">
+        <label>Owner Name</label>
+        <input type="text" name="listing[ownerName]" value="<%= listing.ownerName %>" class="form-control" required>
+      </div>
 
+      <div class="mb-3">
+        <label>Address</label>
+        <input type="text" name="listing[ownerAddress]" value="<%= listing.ownerAddress %>" class="form-control" required>
+      </div>
 
+      <div class="mb-3">
+        <label>Age</label>
+        <input type="number" name="listing[ownerAge]" value="<%= listing.ownerAge %>" class="form-control" required>
+      </div>
 
-        <button class="btn btn-dark edit-btn mt-3">Edit</button>
-        <br/>
-        <br/>
-        
+      <div class="mb-3">
+        <label>Gender</label>
+        <select name="listing[ownerGender]" class="form-control" required>
+          <option value="Male" <%= listing.ownerGender === "Male" ? "selected" : "" %>>Male</option>
+          <option value="Female" <%= listing.ownerGender === "Female" ? "selected" : "" %>>Female</option>
+          <option value="Other" <%= listing.ownerGender === "Other" ? "selected" : "" %>>Other</option>
+        </select>
+      </div>
+
+      <div class="mb-3">
+        <label>Mobile</label>
+        <input type="text" name="listing[ownerMobile]" value="<%= listing.ownerMobile %>" class="form-control" required>
+      </div>
+
+      <button class="btn btn-dark edit-btn mt-3">Update</button>
+      <br/><br/>
     </form>
-    </div>
+  </div>
 </div>
-    
-    

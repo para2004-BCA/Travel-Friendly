@@ -46,6 +46,17 @@
           <a class="nav-link " href="/signup"><b>SignUp</b></a>
           <a class="nav-link" href="/login"><b>Log in</b></a>
           <%}%>
+          <% if (currUser) { %>
+  <div class="nav-user d-flex align-items-center ms-3">
+    <% if (currUser.photo && currUser.photo.url) { %>
+      <img src="<%= currUser.photo.url %>" class="rounded-circle" width="40" height="40" alt="User Photo">
+    <% } else { %>
+      <i class="fa fa-user-circle fa-2x"></i>
+    <% } %>
+    <span class="ms-2"><%= currUser.username %></span>
+  </div>
+<% } %>
+
           <% if(currUser){%>
           <a class="nav-link" href="/logout"><b>Log Out</b></a>
           <% } %>

@@ -124,7 +124,9 @@ body{
   background-color: #fff;
 }
 
-
+.row{
+    width: 100%;
+}
 
 .btns{
     display: flex;
@@ -136,8 +138,8 @@ body{
 
 /* Map */
 #map{
-    height: 400px;
-    width: 80vh;
+    height: 500px;
+    width: 100%;
     border-radius: 1rem;
     box-shadow: 0 4px 16px rgba(0,0,0,0.1);
     margin-top: 1rem;
@@ -187,4 +189,12 @@ h3,h4{
   line-height: 1.6;
   margin-top: 1rem;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.owner-info-box {
+  border: 1px solid #ccc;
+  padding: 1rem;
+  background-color: #f8f9fa;
+  border-radius: 10px;
+  margin-top: 1rem;
 }

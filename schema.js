@@ -1,4 +1,4 @@
-const Joi = require("joi");
+const Joi = require('joi');
 
 module.exports.listingSchema = Joi.object({
   listing: Joi.object({
@@ -9,7 +9,7 @@ module.exports.listingSchema = Joi.object({
     price: Joi.number().required().min(0),
     image: Joi.string().allow("", null),
 
-    // ✅ Add this:
+    // ✅ Valid listing types
     type: Joi.string()
       .valid(
         "Trending",
@@ -24,7 +24,14 @@ module.exports.listingSchema = Joi.object({
         "Domes",
         "Boats"
       )
-      .required()
+      .required(),
+
+    // ✅ Owner information
+    ownerName: Joi.string().required(),
+    ownerAddress: Joi.string().required(),
+    ownerAge: Joi.number().min(18).max(120).required(),
+    ownerGender: Joi.string().valid("Male", "Female", "Other").required(),
+    ownerMobile: Joi.string().pattern(/^[0-9]{10}$/).required()
   }).required()
 });
 

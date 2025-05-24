@@ -8,6 +8,11 @@ const userSchema = new Schema({
         type:String,
         required:true,
     },
+    photo: {
+  url: String,
+  filename: String
+}
+
 });
 
 

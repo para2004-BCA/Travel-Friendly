@@ -18,7 +18,7 @@ const flash=require("connect-flash");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
 const User = require("./models/user.js");
-
+const bookingRouter = require("./routes/bookings.js");
 
 const listingsRouter=require("./routes/listing.js");
 const reviewsRouter=require("./routes/review.js");
@@ -70,12 +70,6 @@ const sessionOptions={
     },
 };
 
-
-// app.get("/",(req,res)=>{
-//     res.send("Hi ,I am root");
-// });
-
-
 app.use(session(sessionOptions));
 app.use(flash());
 
@@ -94,36 +88,19 @@ app.use((req,res,next)=>{
  next();
 });
 
-// app.get("/demouser",async(req,res)=>{
-//     let fackUser=new User({
-//         email:"student@gmail.com",
-//         username:"delta-student",
-//     });
-//     let registeredUser = await User.register(fackUser,"helloworld");
-//     res.send(registeredUser);
-// })
-
-
 app.use("/listings",listingsRouter);
 app.use("/listings/:id/reviews",reviewsRouter);
 app.use("/",userRouter);
-
-
-
+app.use("/bookings", bookingRouter);
 
 app.all(/.*/,(req,res,next)=>{
     next(new ExpressError(404,"page Not found!"));
 });
 
-
-
 app.use((err,req,res,next)=>{
     let{statusCode=500,message="something went wrong!"}=err;
     res.status(statusCode).render("error.ejs",{message});
-   //res.status(statusCode).send(message);
 });
-
-
 
 app.listen(8080,()=>{
     console.log("server is listing to port 8080");
