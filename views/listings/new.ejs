@@ -1,4 +1,5 @@
 <%= layout("/layouts/boilerplate") %>
+
 <div class="row mt-3">
   <div class="col-8 offset-2">
     <br />
@@ -18,14 +19,13 @@
         />
         <div class="valid-feedback">Looks good!</div>
       </div>
-
       <div class="mb-3">
-        <label for="description" class="form-label">  give your Description & <b>Mobile Number</b></label>
+        <label for="description" class="form-label">  give you Description </label>
         <textarea 
           name="listing[description]"  
           class="form-control" 
           required><%= typeof listing !== 'undefined' ? listing.description : '' %></textarea>
-        <div class="invalid-feedback">Please enter a short description and give your mobile Number</div>
+        <div class="invalid-feedback">Please enter a short description </div>
       </div>
       <!-- Inside your listing creation form -->
 <h5>Owner Details</h5>
@@ -53,8 +53,6 @@
   <label>Mobile</label>
   <input type="text" name="listing[ownerMobile]" class="form-control" required>
 </div>
-
-
       <div class="mb-3">
         <label for="image" class="form-label">Upload Listing Image</label>
         <input 
@@ -62,11 +60,8 @@
           type="file"
           class="form-control"
           required
-     
         />
       </div>
-
-
       <div class="row">
         <div class="mb-3 col-md-4">
           <label for="price" class="form-label">Price</label>
@@ -78,7 +73,6 @@
           />
           <div class="invalid-feedback">Please enter a valid price</div>
         </div>
-
         <div class="mb-3 col-md-8">
           <label for="country" class="form-label">Country</label>
           <input 
@@ -91,7 +85,6 @@
           <div class="invalid-feedback">Please enter the country name</div>
         </div>
       </div>
-
       <div class="mb-3">
         <label for="location" class="form-label">Location</label>
         <input
@@ -120,8 +113,6 @@
     <option>Boats</option>
   </select>
 </div>
-
-
       <br /><br />
       <button class="btn btn-success add-btn mt-3">Add</button>
       <br /><br />

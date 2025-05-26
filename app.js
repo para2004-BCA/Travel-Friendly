@@ -1,9 +1,6 @@
-
 if(process.env.NODE_ENV != "production"){
 require('dotenv').config()
 }
-//console.log(process.env.SECRET);
-
 const exprees=require("express");
 const app=exprees();
 const mongoose=require("mongoose");
@@ -19,13 +16,11 @@ const passport = require("passport");
 const LocalStrategy = require("passport-local");
 const User = require("./models/user.js");
 const bookingRouter = require("./routes/bookings.js");
-
 const listingsRouter=require("./routes/listing.js");
 const reviewsRouter=require("./routes/review.js");
 const userRouter=require("./routes/user.js");
-
+//DataBases connection
 const dburl= process.env.ATLASDB_URL;
-
 
 main()
  .then(()=>{
@@ -34,7 +29,6 @@ main()
 .catch((err)=>{
     console.log(err);
 })
-
 async function main() {
     await mongoose.connect(dburl);
 }
@@ -72,11 +66,9 @@ const sessionOptions={
 
 app.use(session(sessionOptions));
 app.use(flash());
-
 app.use(passport.initialize());
 app.use(passport.session());
 passport.use(new LocalStrategy(User.authenticate()));
-
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
@@ -92,11 +84,9 @@ app.use("/listings",listingsRouter);
 app.use("/listings/:id/reviews",reviewsRouter);
 app.use("/",userRouter);
 app.use("/bookings", bookingRouter);
-
 app.all(/.*/,(req,res,next)=>{
     next(new ExpressError(404,"page Not found!"));
 });
-
 app.use((err,req,res,next)=>{
     let{statusCode=500,message="something went wrong!"}=err;
     res.status(statusCode).render("error.ejs",{message});

@@ -5,4 +5,4 @@ step 3: create a env file and store the mapbox.com TOKEN  MAP and create the SEC
 step 4: run the code nodemon app.js in terminal it show the server is listing to port 8080
 (http://localhost:8080/listings)
  option
- i given databases in mongodb atlas you can give the given data.js as a databases to connect for app.js is a link to connect the local connect you can chang give your local link(dburl:you can give your link)
+ i given databases in mongodb atlas you can give the given data.js as a databases to connect for app.js is a link to connect the local connect you can chang give your local link(dburl:you can give your link lick(mongodb://127.0.0.1:27017/wanderlust))

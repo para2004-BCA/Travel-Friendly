@@ -3,28 +3,22 @@
   <h2>Booking Request Form</h2>
   <form action="/bookings/<%= listing._id %>" method="POST">
     <input type="hidden" name="listingId" value="<%= listing._id %>">
-
     <!-- User Info -->
     <div class="mb-3"><label>Your Name</label><input type="text" name="name" class="form-control" required></div>
     <div class="mb-3"><label>Email</label><input type="email" name="email" class="form-control" required></div>
     <div class="mb-3"><label>Phone</label><input type="text" name="phone" class="form-control" required></div>
     <div class="mb-3"><label>Your Age</label><input type="number" name="age" class="form-control" required></div>
-
     <!-- Booking Details -->
     <div class="mb-3"><label>Number of Adults</label><input type="number" name="numAdults" id="numAdults" class="form-control" required></div>
     <div id="adultFields"></div>
-
     <div class="mb-3"><label>Number of Children</label><input type="number" name="numChildren" id="numChildren" class="form-control"></div>
     <div id="childFields"></div>
-
     <div class="mb-3"><label>Start Date</label><input type="date" name="startDate" class="form-control" required></div>
     <div class="mb-3"><label>End Date</label><input type="date" name="endDate" class="form-control" required></div>
-
     <div class="alert alert-info">Payment is accepted offline at the property after check-in.</div>
     <button class="btn btn-success">Submit Request</button>
   </form>
 </div>
-
 <script>
   document.getElementById("numAdults").addEventListener("input", function () {
     const num = parseInt(this.value);
@@ -41,7 +35,6 @@
         </div>`;
     }
   });
-
   document.getElementById("numChildren").addEventListener("input", function () {
     const num = parseInt(this.value);
     const container = document.getElementById("childFields");

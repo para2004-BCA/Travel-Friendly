@@ -1,30 +1,26 @@
 <% layout("/layouts/boilerplate") %>
+
 <script>
   const mapToken = "<%= process.env.MAP_TOKEN %>";
   const listing = <%- JSON.stringify(listing) %>;
 </script>
-
 <% const isOwner = currUser && listing.owner && listing.owner._id.equals(currUser._id); %>
-
 <div class="container">
   <!-- Listing Title -->
   <div class="text-center my-2">
     <h3><b><%= listing.title %></b></h3>
   </div>
-
   <!-- Listing Card -->
   <div class="card show-card mx-auto mb-4">
     <img src="<%= listing.image.url %>" class="show-img" alt="listing image" />
     <div class="card-body">
       <p class="card-text">Owned by <i><%= listing.owner.username %></i></p>
-
       <!-- Description, Price, Location -->
       <div class="addres">
         <p><%= listing.description %></p>
         <p><strong>Price:</strong> ₹<%= listing.price.toLocaleString("en-IN") %></p>
         <p><strong>Location:</strong> <%= listing.location %>, <%= listing.country %></p>
       </div>
-
       <!-- Owner Information -->
       <h5 class="mt-4">Owner Information</h5>
       <div class="owner-info-box">
@@ -36,7 +32,6 @@
       </div>
     </div>
   </div>
-
   <!-- Action Buttons -->
    <% if (currUser && listing.owner._id.equals(currUser._id)) { %>
     <div class="btns mb-4 justify-content-center">
@@ -46,21 +41,18 @@
       </form>
     </div>
   <% } %>
-
   <!-- Booking Form for Viewers -->
   <% if (currUser && !isOwner) { %>
     <div class="text-center mb-4">
       <a href="/bookings/<%= listing._id %>/request" class="btn btn-success">Request Booking</a>
     </div>
   <% } %>
-
   <!-- View Requests (for Owner) -->
   <% if (isOwner) { %>
     <div class="text-center mb-5">
       <a href="/bookings/dashboard/<%= listing._id %>" class="btn btn-outline-primary">View Booking Requests</a>
     </div>
   <% } %>
-
   <!-- Reviews -->
   <div class="mb-5">
     <% if (currUser) { %>
@@ -83,7 +75,6 @@
         <button class="btn btn-outline-dark">Submit</button>
       </form>
     <% } %>
-
     <% if (listing.reviews.length > 0) { %>
       <hr/>
       <h5>All Reviews</h5>
@@ -105,13 +96,11 @@
       </div>
     <% } %>
   </div>
-
   <!-- Map Section -->
   <div class="mb-5">
     <h4>Where You'll Be</h4>
     <div id="map"></div>
   </div>
 </div>
-
 <!-- JS Includes -->
 <script src="/javascript/map.js"></script>

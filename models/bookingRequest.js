@@ -1,12 +1,10 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-
 const childSchema = new Schema({
   name: String,
   age: Number,
   gender: String,
 });
-
 const bookingRequestSchema = new Schema({
   listing: {
     type: Schema.Types.ObjectId,
@@ -23,5 +21,4 @@ const bookingRequestSchema = new Schema({
     default: Date.now,
   },
 });
-
 module.exports = mongoose.model('BookingRequest', bookingRequestSchema);

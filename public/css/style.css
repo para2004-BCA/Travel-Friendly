@@ -3,12 +3,10 @@
     height: 5rem;
     background-color: white;
 }
-
 .fa-compass{
     color: #fe424d;
     font-size: 2rem;
 }
-
 .nav-link{
 color:#222222 !important;
 }
@@ -18,25 +16,19 @@ color:#222222 !important;
     color:#222222;
 }
 .f-info-links a:hover{
-    text-decoration: underline;
-   
+    text-decoration: underline;  
 }
-
 .f-info-links,.f-info-socials
 ,.f-info-brand{
     width: 100%;
     display:flex;
     align-items: center;
     justify-content: center;
-
 }
-
-
 .f-info-socials i{
     margin-right: 1rem;
     font-size: 1.2rem;
 }
-
 .f-info{
     text-align:center;
    height: 8rem; 
@@ -46,20 +38,16 @@ color:#222222 !important;
    justify-content: center;
    align-items: space-evenly;
 }
-
 /*cards*/
- 
 .listing-card{
     border: none !important;
     margin-bottom: 2rem;
 }
-
 .card-img-top{
     border-radius: 1rem !important;
     width: 100% !important;
     object-fit: cover !important;
 }
-
 .card-body{
    padding: 0 !important;
 }
@@ -78,7 +66,6 @@ body{
 .listing-link{
     text-decoration: none;
 }
-
 /* cared effect */
 .card-img-overlay{
     opacity: 0;
@@ -96,12 +83,10 @@ body{
     background-color: #fe424d;
     border: none !important;
 }
-
 /* edit page */
 .edit-btn{
     background-color: #fe424d;
     border: none !important;
-
 }
 /* show page */
 /* Only style show page image */
@@ -116,18 +101,15 @@ body{
   display: block;
   margin: 1.5rem auto;
 }
-
 /* Optional: style the show card container */
 .show-card {
   padding: 1rem;
   border: none;
   background-color: #fff;
 }
-
 .row{
     width: 100%;
 }
-
 .btns{
     display: flex;
 }
@@ -135,7 +117,6 @@ body{
     padding-left: 0;
     padding-right: 0;
 }
-
 /* Map */
 #map{
     height: 500px;
@@ -144,7 +125,6 @@ body{
     box-shadow: 0 4px 16px rgba(0,0,0,0.1);
     margin-top: 1rem;
 }
-
   /* Flatpickr base calendar style */
   #datePicker {
     width: 74.4%;
@@ -157,25 +137,21 @@ body{
     width: 100%;
     margin-top: 0.5rem;
   }
-
   .flatpickr-calendar {
     font-family: 'Segoe UI', sans-serif;
     border-radius: 1rem;
     overflow: hidden;
   }
-
   .flatpickr-day.selected, 
   .flatpickr-day.today {
     background-color: #343a40;
     color: white;
   }
-
   .flatpickr-months, 
   .flatpickr-weekdays {
     background-color: #f8f9fa;
     border-bottom: 1px solid #dee2e6;
   }
-
 h3,h4{
     margin-top: 2rem;
     font-weight: 600;
@@ -190,7 +166,6 @@ h3,h4{
   margin-top: 1rem;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 }
-
 .owner-info-box {
   border: 1px solid #ccc;
   padding: 1rem;

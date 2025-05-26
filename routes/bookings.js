@@ -4,8 +4,9 @@ const Booking = require("../models/booking");
 const Listing = require("../models/listing");
 const { isLoggedIn } = require("../middleware");
 const PDFDocument = require("pdfkit");
+const sendBookingStatusEmail = require("../utils/sendemail");
 
-// Show the booking request form
+// Show booking request form
 router.get("/:id/request", isLoggedIn, async (req, res) => {
   const { id } = req.params;
   const listing = await Listing.findById(id);
@@ -62,7 +63,7 @@ router.post("/:id", isLoggedIn, async (req, res) => {
   res.redirect(`/listings/${id}`);
 });
 
-// Owner Dashboard to View Bookings
+// Owner dashboard to view bookings
 router.get("/dashboard/:listingId", isLoggedIn, async (req, res) => {
   const { listingId } = req.params;
   const listing = await Listing.findById(listingId);
@@ -76,11 +77,10 @@ router.get("/dashboard/:listingId", isLoggedIn, async (req, res) => {
   res.render("bookings/dashboard", { bookings, listing });
 });
 
-// Accept a Booking
+// Accept a booking
 router.post("/:bookingId/accept", isLoggedIn, async (req, res) => {
   const { bookingId } = req.params;
   const booking = await Booking.findById(bookingId).populate("listing");
-
   if (!booking || !booking.listing.owner.equals(req.user._id)) {
     req.flash("error", "Unauthorized");
     return res.redirect("/listings");
@@ -89,8 +89,8 @@ router.post("/:bookingId/accept", isLoggedIn, async (req, res) => {
   booking.status = "accepted";
   await booking.save();
 
+  // Add to listing bookedDates
   const listing = await Listing.findById(booking.listing._id);
-
   const datesToAdd = [];
   const curr = new Date(booking.startDate);
   while (curr <= booking.endDate) {
@@ -102,33 +102,51 @@ router.post("/:bookingId/accept", isLoggedIn, async (req, res) => {
   listing.bookedDates = [...new Set(listing.bookedDates)];
   await listing.save();
 
-  req.flash("success", "Booking accepted and calendar updated.");
+  // Send accepted email
+  await sendBookingStatusEmail(
+    booking.email,
+    booking.name,
+    listing.title,
+    "accepted",
+    booking.startDate,
+    booking.endDate
+  );
+
+  req.flash("success", "Booking accepted and  updated.");
   res.redirect(`/bookings/dashboard/${listing._id}`);
 });
 
-// Reject a Booking
+// Reject a booking
 router.post("/:bookingId/reject", isLoggedIn, async (req, res) => {
   const { bookingId } = req.params;
   const booking = await Booking.findById(bookingId).populate("listing");
-
   if (!booking || !booking.listing.owner.equals(req.user._id)) {
     req.flash("error", "Unauthorized");
     return res.redirect("/listings");
   }
+
+  // Send rejection email before deletion
+  await sendBookingStatusEmail(
+    booking.email,
+    booking.name,
+    booking.listing.title,
+    "rejected",
+    booking.startDate,
+    booking.endDate
+  );
 
   await Booking.findByIdAndDelete(bookingId);
   req.flash("success", "Booking request rejected.");
   res.redirect(`/bookings/dashboard/${booking.listing._id}`);
 });
 
-// Download PDF of booking requests
+// Download PDF of bookings
 router.get("/dashboard/:listingId/download", isLoggedIn, async (req, res) => {
   const { listingId } = req.params;
   const listing = await Listing.findById(listingId);
-
   if (!listing || !listing.owner.equals(req.user._id)) {
     req.flash("error", "Unauthorized access");
-    return res.redirect(`/listings`);
+    return res.redirect("/listings");
   }
 
   const bookings = await Booking.find({ listing: listingId }).populate("user");

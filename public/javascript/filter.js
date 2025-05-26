@@ -5,7 +5,6 @@ document.addEventListener("DOMContentLoaded", () => {
   filters.forEach(filter => {
     filter.addEventListener("click", () => {
       const selectedType = filter.dataset.type;
-
       cards.forEach(card => {
         if (!selectedType || card.dataset.type === selectedType) {
           card.style.display = "block";

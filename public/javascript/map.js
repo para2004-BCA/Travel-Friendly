@@ -1,5 +1,4 @@
 //const Listing = require("../../models/listing");
-
 	mapboxgl.accessToken = mapToken;
     const map = new mapboxgl.Map({
         container: 'map', // container ID

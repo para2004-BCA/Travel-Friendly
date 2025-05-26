@@ -2,12 +2,10 @@
 
 <div class="container mt-5">
   <h2>Booking Requests for "<%= listing.title %>"</h2>
-
   <% if (bookings.length === 0) { %>
     <div class="alert alert-warning">No booking requests found.</div>
   <% } else { %>
     <a href="/bookings/dashboard/<%= listing._id %>/download" class="btn btn-outline-dark mb-3">Download as PDF</a>
-
     <table class="table table-bordered">
       <thead>
         <tr>
@@ -24,8 +22,8 @@
         <% bookings.forEach((booking, index) => { %>
           <tr>
             <td><%= index + 1 %></td>
-            <td><%= booking.user?.username || booking.name %></td>
-            <td><%= booking.user?.email || booking.email %></td>
+            <td><%= booking.name %></td>
+            <td><a href="mailto:<%= booking.email %>"><%= booking.email %></a></td>
             <td><%= booking.startDate ? booking.startDate.toDateString() : 'N/A' %></td>
             <td><%= booking.endDate ? booking.endDate.toDateString() : 'N/A' %></td>
             <td><%= booking.status %></td>
