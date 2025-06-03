@@ -53,6 +53,11 @@
       <a href="/bookings/dashboard/<%= listing._id %>" class="btn btn-outline-primary">View Booking Requests</a>
     </div>
   <% } %>
+  <div class="col-8 offset-3 mb-3">
+  <h4>Booked Dates</h4>
+<div id="calendar" class="mb-3" style="max-width: 500px;"></div>
+</div>
+
   <!-- Reviews -->
   <div class="mb-5">
     <% if (currUser) { %>
@@ -104,3 +109,25 @@
 </div>
 <!-- JS Includes -->
 <script src="/javascript/map.js"></script>
+<script>
+  const bookedDates = <%- JSON.stringify(listing.bookedDates || []) %>;
+  const isOwner = <%= JSON.stringify(currUser && listing.owner && listing.owner._id.equals(currUser._id)) %>;
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const calendar = document.getElementById("calendar");
+
+    if (calendar) {
+      flatpickr(calendar, {
+        mode: "multiple",
+        defaultDate: bookedDates,
+        dateFormat: "Y-m-d",
+        inline: true,
+        clickOpens: false,      // ✅ Disable interaction
+        minDate: "today",       // ✅ Hide past dates
+        showMonths: 2,
+        disable: isOwner ? [] : bookedDates // 🔒 block interaction for users
+      });
+    }
+  });
+</script>
+

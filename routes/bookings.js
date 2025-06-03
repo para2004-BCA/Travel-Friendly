@@ -17,7 +17,7 @@ router.get("/:id/request", isLoggedIn, async (req, res) => {
   res.render("bookings/request.ejs", { listing });
 });
 
-// Handle booking form submission
+// Handle booking submission
 router.post("/:id", isLoggedIn, async (req, res) => {
   const { id } = req.params;
   const listing = await Listing.findById(id);
@@ -63,7 +63,7 @@ router.post("/:id", isLoggedIn, async (req, res) => {
   res.redirect(`/listings/${id}`);
 });
 
-// Owner dashboard to view bookings
+// Dashboard: View all bookings for a listing
 router.get("/dashboard/:listingId", isLoggedIn, async (req, res) => {
   const { listingId } = req.params;
   const listing = await Listing.findById(listingId);
@@ -81,6 +81,7 @@ router.get("/dashboard/:listingId", isLoggedIn, async (req, res) => {
 router.post("/:bookingId/accept", isLoggedIn, async (req, res) => {
   const { bookingId } = req.params;
   const booking = await Booking.findById(bookingId).populate("listing");
+
   if (!booking || !booking.listing.owner.equals(req.user._id)) {
     req.flash("error", "Unauthorized");
     return res.redirect("/listings");
@@ -89,7 +90,6 @@ router.post("/:bookingId/accept", isLoggedIn, async (req, res) => {
   booking.status = "accepted";
   await booking.save();
 
-  // Add to listing bookedDates
   const listing = await Listing.findById(booking.listing._id);
   const datesToAdd = [];
   const curr = new Date(booking.startDate);
@@ -102,7 +102,6 @@ router.post("/:bookingId/accept", isLoggedIn, async (req, res) => {
   listing.bookedDates = [...new Set(listing.bookedDates)];
   await listing.save();
 
-  // Send accepted email
   await sendBookingStatusEmail(
     booking.email,
     booking.name,
@@ -112,7 +111,7 @@ router.post("/:bookingId/accept", isLoggedIn, async (req, res) => {
     booking.endDate
   );
 
-  req.flash("success", "Booking accepted and  updated.");
+  req.flash("success", "Booking accepted and updated.");
   res.redirect(`/bookings/dashboard/${listing._id}`);
 });
 
@@ -120,12 +119,12 @@ router.post("/:bookingId/accept", isLoggedIn, async (req, res) => {
 router.post("/:bookingId/reject", isLoggedIn, async (req, res) => {
   const { bookingId } = req.params;
   const booking = await Booking.findById(bookingId).populate("listing");
+
   if (!booking || !booking.listing.owner.equals(req.user._id)) {
     req.flash("error", "Unauthorized");
     return res.redirect("/listings");
   }
 
-  // Send rejection email before deletion
   await sendBookingStatusEmail(
     booking.email,
     booking.name,
@@ -140,36 +139,52 @@ router.post("/:bookingId/reject", isLoggedIn, async (req, res) => {
   res.redirect(`/bookings/dashboard/${booking.listing._id}`);
 });
 
-// Download PDF of bookings
-router.get("/dashboard/:listingId/download", isLoggedIn, async (req, res) => {
-  const { listingId } = req.params;
+// View single booking details
+router.get("/dashboard/:listingId/booking/:bookingId", isLoggedIn, async (req, res) => {
+  const { listingId, bookingId } = req.params;
+
   const listing = await Listing.findById(listingId);
+  const booking = await Booking.findById(bookingId).populate("user");
+
   if (!listing || !listing.owner.equals(req.user._id)) {
     req.flash("error", "Unauthorized access");
     return res.redirect("/listings");
   }
 
-  const bookings = await Booking.find({ listing: listingId }).populate("user");
+  res.render("bookings/view", { booking, listing });
+});
+
+// Download individual booking as PDF
+router.get("/dashboard/:listingId/booking/:bookingId/download", isLoggedIn, async (req, res) => {
+  const { listingId, bookingId } = req.params;
+  const listing = await Listing.findById(listingId);
+  const booking = await Booking.findById(bookingId).populate("user");
+
+  if (!listing || !listing.owner.equals(req.user._id)) {
+    req.flash("error", "Unauthorized");
+    return res.redirect("/listings");
+  }
 
   const doc = new PDFDocument();
   res.setHeader("Content-Type", "application/pdf");
-  res.setHeader("Content-Disposition", "attachment; filename=bookings.pdf");
+  res.setHeader("Content-Disposition", "attachment; filename=booking-details.pdf");
   doc.pipe(res);
 
-  doc.fontSize(16).text(`Booking Requests for "${listing.title}"`, { underline: true });
-  doc.moveDown();
-
-  bookings.forEach((booking, i) => {
-    const start = booking.startDate ? booking.startDate.toDateString() : "N/A";
-    const end = booking.endDate ? booking.endDate.toDateString() : "N/A";
-    const username = booking.user?.username || "N/A";
-    const userEmail = booking.user?.email || "N/A";
-    doc
-      .fontSize(12)
-      .text(`${i + 1}. ${username} - ${userEmail} | ${start} to ${end} | Status: ${booking.status}`);
-    doc.moveDown();
-  });
-
+  doc.fontSize(16).text(`Booking Details for ${listing.title}`, { underline: true }).moveDown();
+  doc.text(`Name: ${booking.name}`);
+  doc.text(`Email: ${booking.email}`);
+  doc.text(`Phone: ${booking.phone}`);
+  doc.text(`Age: ${booking.age}`);
+  doc.text(`People: ${booking.numPeople}`);
+  doc.text(`Start: ${booking.startDate.toDateString()}`);
+  doc.text(`End: ${booking.endDate.toDateString()}`);
+  doc.text(`Message: ${booking.message || "None"}`);
+  if (booking.children.length > 0) {
+    doc.moveDown().text("Children:");
+    booking.children.forEach((child, i) => {
+      doc.text(`${i + 1}. ${child.name} - ${child.age} - ${child.gender}`);
+    });
+  }
   doc.end();
 });
 

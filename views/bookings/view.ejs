@@ -1,0 +1,25 @@
+<% layout("/layouts/boilerplate") %>
+<div class="container mt-4">
+  <h3>Booking Details for <%= listing.title %></h3>
+  <hr />
+  <p><strong>Name:</strong> <%= booking.name %></p>
+  <p><strong>Email:</strong> <%= booking.email %></p>
+  <p><strong>Phone:</strong> <%= booking.phone %></p>
+  <p><strong>Age:</strong> <%= booking.age %></p>
+  <p><strong>People:</strong> <%= booking.numPeople %></p>
+  <p><strong>Children:</strong>
+    <% if (booking.children.length === 0) { %>
+      None
+    <% } else { %>
+      <ul>
+        <% booking.children.forEach(child => { %>
+          <li><%= child.name %> - <%= child.age %> - <%= child.gender %></li>
+        <% }) %>
+      </ul>
+    <% } %>
+  </p>
+  <p><strong>Booking Dates:</strong> <%= booking.startDate.toDateString() %> - <%= booking.endDate.toDateString() %></p>
+  <p><strong>Message:</strong> <%= booking.message || 'None' %></p>
+
+  <a href="/bookings/dashboard/<%= listing._id %>/booking/<%= booking._id %>/download" class="btn btn-outline-dark mt-3">Download PDF</a>
+</div>

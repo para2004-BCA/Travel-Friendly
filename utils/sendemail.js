@@ -8,7 +8,15 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-const sendBookingStatusEmail = async (to, name, listingTitle, status, startDate, endDate) => {
+const sendBookingStatusEmail = async (
+  to,
+  name,
+  listingTitle,
+  status,
+  startDate,
+  endDate,
+  customMessage = null
+) => {
   let subject = "";
   let html = "";
 
@@ -28,6 +36,13 @@ const sendBookingStatusEmail = async (to, name, listingTitle, status, startDate,
       <p>Hi <b>${name}</b>,</p>
       <p>Unfortunately, your booking for <strong>${listingTitle}</strong> from <b>${formattedStart}</b> to <b>${formattedEnd}</b> has been <span style="color:red"><b>rejected</b></span>.</p>
       <p>You can explore other listings anytime on our travel-friendly app.</p>
+    `;
+  } else if (status === "new_request") {
+    subject = `📩 New Booking Request for "${listingTitle}"`;
+    html = customMessage || `
+      <p>Hi <b>${name}</b>,</p>
+      <p>You have received a new booking request for <strong>${listingTitle}</strong> from <b>${formattedStart}</b> to <b>${formattedEnd}</b>.</p>
+      <p>Please log in to your dashboard to Accept or Reject this booking.</p>
     `;
   }
 

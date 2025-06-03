@@ -1,0 +1,12 @@
+<% layout("/layouts/boilerplate") %>
+<div class="container mt-4">
+  <h2>Booking Details</h2>
+  <p><strong>Name:</strong> <%= booking.name %></p>
+  <p><strong>Email:</strong> <%= booking.email %></p>
+  <p><strong>Phone:</strong> <%= booking.phone %></p>
+  <p><strong>Age:</strong> <%= booking.age %></p>
+  <p><strong>Number of People:</strong> <%= booking.numPeople %></p>
+  <p><strong>Dates:</strong> <%= booking.startDate.toDateString() %> - <%= booking.endDate.toDateString() %></p>
+  <p><strong>Status:</strong> <%= booking.status %></p>
+  <p><strong>Message:</strong> <%= booking.message %></p>
+</div>

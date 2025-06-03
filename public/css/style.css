@@ -173,3 +173,9 @@ h3,h4{
   border-radius: 10px;
   margin-top: 1rem;
 }
+.flatpickr-day.selected {
+  background: #ff595e !important;
+  color: white;
+  border-radius: 50%;
+}
+
