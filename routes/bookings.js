@@ -5,6 +5,8 @@ const Listing = require("../models/listing");
 const { isLoggedIn } = require("../middleware");
 const PDFDocument = require("pdfkit");
 const sendBookingStatusEmail = require("../utils/sendemail");
+const User = require("../models/user");
+
 
 // Show booking request form
 router.get("/:id/request", isLoggedIn, async (req, res) => {
@@ -32,7 +34,8 @@ router.post("/:id", isLoggedIn, async (req, res) => {
     phone,
     age,
     numPeople,
-    children,
+    adults=[],
+    children=[],
     startDate,
     endDate,
     message,
@@ -51,7 +54,8 @@ router.post("/:id", isLoggedIn, async (req, res) => {
     phone,
     age,
     numPeople,
-    children: Array.isArray(children) ? children : [],
+    adults:Array.isArray(adults)?adults:[adults],
+    children: Array.isArray(children) ? children : [children],
     startDate: new Date(startDate),
     endDate: new Date(endDate),
     message,
@@ -59,6 +63,20 @@ router.post("/:id", isLoggedIn, async (req, res) => {
   });
 
   await booking.save();
+  // Find owner info
+const owner = await User.findById(listing.owner);
+
+// Send email to owner
+await sendBookingStatusEmail(
+  owner.email,
+  owner.username,
+  listing.title,
+  "new_request",
+  booking.startDate,
+  booking.endDate,
+  booking.name  // booked user's name
+);
+
   req.flash("success", "Booking request submitted successfully!");
   res.redirect(`/listings/${id}`);
 });
@@ -167,7 +185,7 @@ router.get("/dashboard/:listingId/booking/:bookingId/download", isLoggedIn, asyn
 
   const doc = new PDFDocument();
   res.setHeader("Content-Type", "application/pdf");
-  res.setHeader("Content-Disposition", "attachment; filename=booking-details.pdf");
+  res.setHeader("Content-Disposition", `attachment; filename=booking-${booking._id}.pdf`);
   doc.pipe(res);
 
   doc.fontSize(16).text(`Booking Details for ${listing.title}`, { underline: true }).moveDown();
@@ -179,6 +197,14 @@ router.get("/dashboard/:listingId/booking/:bookingId/download", isLoggedIn, asyn
   doc.text(`Start: ${booking.startDate.toDateString()}`);
   doc.text(`End: ${booking.endDate.toDateString()}`);
   doc.text(`Message: ${booking.message || "None"}`);
+if (booking.adults && booking.adults.length > 0) {
+    doc.moveDown().text("Adult Guests:");
+    booking.adults.forEach((adult, i) => {
+      doc.text(`${i + 1}. ${adult.name} - ${adult.age} - ${adult.gender}`);
+    });
+  }
+
+
   if (booking.children.length > 0) {
     doc.moveDown().text("Children:");
     booking.children.forEach((child, i) => {
@@ -187,5 +213,40 @@ router.get("/dashboard/:listingId/booking/:bookingId/download", isLoggedIn, asyn
   }
   doc.end();
 });
+
+// ✅ Download ALL bookings as PDF (for dashboard)
+router.get("/dashboard/:listingId/download", isLoggedIn, async (req, res) => {
+  const { listingId } = req.params;
+  const listing = await Listing.findById(listingId);
+
+  if (!listing || !listing.owner.equals(req.user._id)) {
+    req.flash("error", "Unauthorized access");
+    return res.redirect("/listings");
+  }
+
+  const bookings = await Booking.find({ listing: listingId });
+
+  const doc = new PDFDocument();
+  res.setHeader("Content-Type", "application/pdf");
+  res.setHeader("Content-Disposition", "attachment; filename=bookings-summary.pdf");
+  doc.pipe(res);
+
+  doc.fontSize(18).text(`Booking Summary for ${listing.title}`, { underline: true });
+  doc.moveDown();
+
+  bookings.forEach((booking, index) => {
+    doc.fontSize(12).text(
+      `${index + 1}. Name: ${booking.name}
+      Email: ${booking.email}
+      Phone: ${booking.phone}
+      Dates: ${booking.startDate.toDateString()} - ${booking.endDate.toDateString()}
+      Status: ${booking.status}`
+    );
+    doc.moveDown();
+  });
+
+  doc.end();
+});
+
 
 module.exports = router;

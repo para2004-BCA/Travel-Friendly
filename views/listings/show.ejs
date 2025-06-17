@@ -18,7 +18,8 @@
       <!-- Description, Price, Location -->
       <div class="addres">
         <p><%= listing.description %></p>
-        <p><strong>Price:</strong> ₹<%= listing.price.toLocaleString("en-IN") %></p>
+        <p class="card-text">
+           &#8377;<%= listing.price.toLocaleString("en-IN")%>/night</p>
         <p><strong>Location:</strong> <%= listing.location %>, <%= listing.country %></p>
       </div>
       <!-- Owner Information -->
@@ -53,10 +54,14 @@
       <a href="/bookings/dashboard/<%= listing._id %>" class="btn btn-outline-primary">View Booking Requests</a>
     </div>
   <% } %>
-  <div class="col-8 offset-3 mb-3">
+  
+  <%if (currUser) {%> 
+  <div class="col-8 offset-3 mb-4">
   <h4>Booked Dates</h4>
-<div id="calendar" class="mb-3" style="max-width: 500px;"></div>
+<div id="calendar" class="mb-3 flatpickr-calendar static-calendar" style="max-width: 500px;"></div>
 </div>
+<% } %>
+
 
   <!-- Reviews -->
   <div class="mb-5">

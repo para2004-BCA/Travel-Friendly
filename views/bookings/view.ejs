@@ -1,25 +1,68 @@
-<% layout("/layouts/boilerplate") %>
-<div class="container mt-4">
-  <h3>Booking Details for <%= listing.title %></h3>
-  <hr />
+<% layout('/layouts/boilerplate') %>
+
+<div class="container mt-5">
+  <h2>Booking Details for <%= listing.title %></h2>
+  <hr/>
+
   <p><strong>Name:</strong> <%= booking.name %></p>
   <p><strong>Email:</strong> <%= booking.email %></p>
   <p><strong>Phone:</strong> <%= booking.phone %></p>
   <p><strong>Age:</strong> <%= booking.age %></p>
-  <p><strong>People:</strong> <%= booking.numPeople %></p>
-  <p><strong>Children:</strong>
-    <% if (booking.children.length === 0) { %>
-      None
-    <% } else { %>
-      <ul>
+  <!-- <p><strong>Total People: </strong><%= booking.numPeople %></p> -->
+
+<% if (booking.adults && booking.adults.length > 0) { %>
+  <h5>Adult Details</h5>
+  <table class="table table-bordered mt-3">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Name</th>
+        <th>Age</th>
+        <th>Gender</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% booking.adults.forEach((adult, index) => { %>
+        <tr>
+          <td><%= index + 1 %></td>
+          <td><%= adult.name %></td>
+          <td><%= adult.age %></td>
+          <td><%= adult.gender %></td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+<% } else { %>
+  <p><strong>Adult Info:</strong> Not provided</p>
+<% } %>
+
+
+  <% if (booking.children && booking.children.length > 0) { %>
+    <h5>Children Details</h5>
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>Name</th><th>Age</th><th>Gender</th>
+        </tr>
+      </thead>
+      <tbody>
         <% booking.children.forEach(child => { %>
-          <li><%= child.name %> - <%= child.age %> - <%= child.gender %></li>
+          <tr>
+            <td><%= child.name %></td>
+            <td><%= child.age %></td>
+            <td><%= child.gender %></td>
+          </tr>
         <% }) %>
-      </ul>
-    <% } %>
-  </p>
+      </tbody>
+    </table>
+  <% } %>
+
   <p><strong>Booking Dates:</strong> <%= booking.startDate.toDateString() %> - <%= booking.endDate.toDateString() %></p>
   <p><strong>Message:</strong> <%= booking.message || 'None' %></p>
+  <a href="/bookings/dashboard/<%= listing._id %>/booking/<%= booking._id %>/download" class="btn btn-secondary mt-3">
+  Download Details as PDF
+</a>
 
-  <a href="/bookings/dashboard/<%= listing._id %>/booking/<%= booking._id %>/download" class="btn btn-outline-dark mt-3">Download PDF</a>
+
+  <a href="/bookings/dashboard/<%= listing._id %>" class="btn btn-secondary mt-3">Back to Dashboard</a>
 </div>

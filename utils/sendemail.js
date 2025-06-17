@@ -15,7 +15,8 @@ const sendBookingStatusEmail = async (
   status,
   startDate,
   endDate,
-  customMessage = null
+  customMessage = null,
+  bookedBy=" "
 ) => {
   let subject = "";
   let html = "";
@@ -39,10 +40,12 @@ const sendBookingStatusEmail = async (
     `;
   } else if (status === "new_request") {
     subject = `📩 New Booking Request for "${listingTitle}"`;
-    html = customMessage || `
+    html = `
       <p>Hi <b>${name}</b>,</p>
-      <p>You have received a new booking request for <strong>${listingTitle}</strong> from <b>${formattedStart}</b> to <b>${formattedEnd}</b>.</p>
-      <p>Please log in to your dashboard to Accept or Reject this booking.</p>
+      <p>You received a <strong>new booking request</strong> for <b>${listingTitle}</b>.</p>
+      <p>Dates: <b>${formattedStart}</b> to <b>${formattedEnd}</b></p>
+      <p>Booked by: <strong>${bookedBy}</strong></p>
+      <p>Check your dashboard to accept or reject this request.</p>
     `;
   }
 
